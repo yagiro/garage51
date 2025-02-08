@@ -28,21 +28,22 @@ const Contr = (props: PropsWithChildren) => (
 type RemoveItemHandler = (itemId: string) => unknown
 type ItemCheckChangeHandler = (itemId: string, checked: boolean) => unknown
 
-function renderItems(items: ListItem[], onRemoveItem: RemoveItemHandler, onItemCheckToggle: ItemCheckChangeHandler) {
-        return items.map(item => {
+function renderItems(
+    items: ListItem[],
+    onRemoveItem: RemoveItemHandler,
+    onItemCheckToggle: ItemCheckChangeHandler
+) {
+    return items.map(item => {
         return (
-            <Row key={item.id} className='p-2 gap-3 bg-orange-20011 bg-violet-200 max-w-[400px] justify-between'>
-                <div>{item.title as string ?? 'noname'}</div>
-                    <Row className="gap-2">
-                    <Checkbox value={item.checked} onChange={(checked) => onItemCheckToggle(item.id, checked)} />
-                    <Image
-                        src={xMarkIcon}
-                        alt="X"
-                        className="cursor-pointer shrink-0"
-                        onClick={() => onRemoveItem(item.id)}
-                    />
-                </Row>
-
+            <Row key={item.id} className='p-2 gap-3 bg-violet-200 max-w-max justify-between'>
+                <Checkbox value={item.checked} onChange={(checked) => onItemCheckToggle(item.id, checked)} />
+                <div className='shrink'>{item.title as string ?? 'noname'}</div>
+                <Image
+                    src={xMarkIcon}
+                    alt="X"
+                    className="cursor-pointer"
+                    onClick={() => onRemoveItem(item.id)}
+                />
             </Row>
         )
     })
@@ -63,6 +64,7 @@ export default function ListPage({listId}: Props)  {
     const [listItems, setListItems] = useState(emptyArr as ListItem[])
     const [stale, setStale] = useState(true)
     const [itemTitle, setItemTitle] = useState('')
+    const [showChecked, setShowChecked] = useState(true)
 
     useEffect(() => {
         if (!stale) return;
@@ -92,7 +94,9 @@ export default function ListPage({listId}: Props)  {
         )
     }
 
-    const filteredItems = listItems.filter(item => (item.valuesConcat as string).includes(textFilter))
+    const filteredItems = listItems
+        .filter(item => (item.valuesConcat as string).includes(textFilter))
+        .filter(item => showChecked || !item.checked)
 
     const handleRemoveItem = async (itemId: string) => {
         await removeListItem(itemId)
@@ -126,7 +130,12 @@ export default function ListPage({listId}: Props)  {
             <Row className="gap-8 items-end">
                 <TextInput label="Filter" value={textFilter} onChange={e => setTextFilter(e.target.value)} className="grow max-w-xl" />
             </Row>
-            <Col className='min-h-60 gap-3'>
+            <Row className='gap-1'>
+                <Checkbox value={showChecked} onChange={setShowChecked}/>
+                <span>Show Checked</span>
+            </Row>
+            <Col className='min-h-60 gap-4'>
+                <Row className="text-sm">Showing {filteredItems.length} of {listItems.length} items</Row>
                 <Col className='min-h-60 gap-3'>
                     { renderItems(filteredItems, handleRemoveItem, handleItemCheckToggle) }
                 </Col>
@@ -147,7 +156,6 @@ export default function ListPage({listId}: Props)  {
                         className="grow"
                     />
                     <Button className='self-end sm:h-[42px]' disabled={!itemTitle} type="submit">Create Item</Button>
-
                 </div>
             </form>
         </Col>
