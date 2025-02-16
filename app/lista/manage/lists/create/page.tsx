@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import xMarkIcon from '@/app/icons/x-mark.svg'
 import Image from "next/image";
 import { ListSchemaField, ListSchemaFieldType } from "@/app/lista/types";
+import { randomUUID } from "crypto";
 
 // todo: code style
 
@@ -46,8 +47,16 @@ function renderFields(
     })
 }
 
+function getRandomUuid() {
+    /*
+    This function is invoked once on the server on initial SSR (used to create initialFields),
+    and later, on the browser (on user interaction).
+    */
+    return randomUUID?.() ?? window.crypto.randomUUID()
+}
+
 const createNewField = (name = '', type = ListSchemaFieldType.Text): ListSchemaField => ({
-    tempId: window.crypto.randomUUID(),
+    tempId: getRandomUuid(),
     name,
     type,
 })
