@@ -17,7 +17,7 @@ export default function TextInput(props: TextInputProps) {
     } = props
     return (
         <Col className={clsx(`text-input`, className)} data-field={name}>
-            <Row>{ label }</Row>
+            <Row className="text-sm">{ label }</Row>
             <input
                 { ...inputProps }
                 name={name}

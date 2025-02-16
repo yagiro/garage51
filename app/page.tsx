@@ -1,4 +1,4 @@
-import G51Logo from './components/G51Logo'
+import G51Logo from '@/app/components/G51Logo'
 
 export default function Home() {
   return (

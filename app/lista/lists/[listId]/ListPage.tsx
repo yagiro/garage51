@@ -1,29 +1,24 @@
 'use client'
 
 import Col from '@/app/components/layout/Col'
-import { ListItem } from '../types'
-import { addListItem, getListItems, removeListItem, setItemChecked } from '../serverActions'
+import { ListItem } from '@/app/lista/types'
+import { addListItem, getListItems, removeListItem, setItemChecked } from '@/app/lista/serverActions'
 import TextInput from '@/app/components/basic/textInput/TextInput'
 import Button from '@/app/components/basic/button/Button'
 import Row from '@/app/components/layout/Row'
-import Link from 'next/link'
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import xMarkIcon from '@/app/icons/x-mark.svg'
 import Checkbox from '@/app/components/basic/checkbox/Checkbox'
 import clsx from 'clsx'
 import Image from 'next/image'
+import MainBreadcrumbs from '../../components/MainBreadcrumbs'
+import Title from '@/app/lista/components/Title'
 
 // todo: code style
 
 interface Props {
     listId: string
 }
-
-const Contr = (props: PropsWithChildren) => (
-    <Col className='p-5 bg-white h-screen text-gray-600 gap-3'>
-        {props.children}
-    </Col>
-)
 
 type RemoveItemHandler = (itemId: string) => unknown
 type ItemCheckChangeHandler = (itemId: string, checked: boolean) => unknown
@@ -65,6 +60,7 @@ export default function ListPage({listId}: Props)  {
     const [stale, setStale] = useState(true)
     const [itemTitle, setItemTitle] = useState('')
     const [showChecked, setShowChecked] = useState(true)
+    const [showFilters, setShowFilters] = useState(false)
 
     useEffect(() => {
         if (!stale) return;
@@ -80,17 +76,13 @@ export default function ListPage({listId}: Props)  {
 
     if (loading) {
         return (
-            <Contr>
-                <div className='text-xl'>Loading list data ...</div>
-            </Contr>
+            <div className='text-xl'>Loading list data ...</div>
         )
     }
 
     if (!listItems) {
         return (
-            <Contr>
-                <div className='text-xl'>Could not find list: { listId }</div>
-            </Contr>
+            <div className='text-xl'>Could not find list: { listId }</div>
         )
     }
 
@@ -116,27 +108,37 @@ export default function ListPage({listId}: Props)  {
     }
 
     return (
-        <Col className='p-5 bg-white h-screen bg-gray-100 text-gray-600 gap-3'>
-            <Col>
-                <Row className='text-md text-gray-500 gap-1'>
-                    <Link href="/lista">Lists</Link>
-                    <span>&gt;</span>
-                </Row>
-                <Row className='gap-4 items-end'>
-                    <div className='text-4xl'>{listId}</div>
-                    <span className={clsx('text-sm bg-amber-200 px-1 py-0.5 rounded', {'invisible': !fetching})}>Syncing</span>
-                </Row>
-            </Col>
-            <Row className="gap-8 items-end">
-                <TextInput label="Filter" value={textFilter} onChange={e => setTextFilter(e.target.value)} className="grow max-w-xl" />
+        <Col className="gap-2 md:gap-3">
+            <Row className="justify-between">
+                <Col>
+                    <MainBreadcrumbs />
+                    <Row className='gap-4 items-end'>
+                        <Title>{listId}</Title>
+                        <span className={clsx('text-sm bg-amber-200 px-1 py-0.5 rounded', {'invisible': !fetching})}>Syncing</span>
+                    </Row>
+                </Col>
+                <Col>
+                    <Row className='gap-1' onClick={ () => setShowFilters(prev => !prev) }>
+                        <Checkbox value={showFilters}/>
+                        <span>Filters</span>
+                    </Row>
+                </Col>
             </Row>
-            <Row className='gap-1'>
-                <Checkbox value={showChecked} onChange={setShowChecked}/>
-                <span>Show Checked</span>
-            </Row>
-            <Col className='min-h-60 gap-4'>
+            <Col className={ clsx('filters bg-indigo-100 p-2 gap-2 rounded', {'hidden': !showFilters}) }>
+                <Row className="items-end">
+                    <TextInput label="Filter" value={textFilter} onChange={e => setTextFilter(e.target.value)} className="grow max-w-xl" />
+                </Row>
+                <Row className='gap-1 text-sm items-center'>
+                    <Checkbox value={showChecked} onChange={setShowChecked}/>
+                    <span>Show Completed</span>
+                </Row>
                 <Row className="text-sm">Showing {filteredItems.length} of {listItems.length} items</Row>
-                <Col className='min-h-60 gap-3'>
+            </Col>
+            <Col className='gap-4 items-start'>
+                <Col className={ clsx(
+                    'gap-3 overflow-y-auto pr-4',
+                    showFilters ? 'max-h-[40vh]' : 'max-h-[55vh]',
+                ) }>
                     { renderItems(filteredItems, handleRemoveItem, handleItemCheckToggle) }
                 </Col>
             </Col>

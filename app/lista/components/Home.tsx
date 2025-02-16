@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Col from '../../components/layout/Col'
-import { addList, getAllLists, removeList } from '../serverActions'
-import TextInput from '../../components/basic/textInput/TextInput'
+import { getAllLists, removeList } from '../serverActions'
+// import TextInput from '../../components/basic/textInput/TextInput'
 import { List } from '../types'
 import Row from '@/app/components/layout/Row'
 import Link from 'next/link'
@@ -26,7 +26,7 @@ interface ListInfoProps {
 function ListInfo(props: ListInfoProps) {
     const { list, onRemove } = props
     return (
-        <Link href={`/lista/${list.id}`}>
+        <Link href={`/lista/lists/${list.id}`}>
             <Row key={list.id} className='gap-5 p-3 bg-violet-200 shadow-sm justify-between'>
                 {list.name}
                 <Image
@@ -47,7 +47,7 @@ const classes = {
 export default function Home(props: Props) {
     const [lists, setLists] = useState<List[]>(props.initialLists)
     const [isListsStale, setListsStale] = useState<boolean>(false)
-    const [newListName, setNewListName] = useState<string>('')
+    // const [newListName, setNewListName] = useState<string>('')
     useEffect(() => {
         if (isListsStale) {
             getAllLists()
@@ -60,15 +60,16 @@ export default function Home(props: Props) {
         }
     }, [isListsStale])
 
-    const addListAndRefetch = async () => {
-        try {
-            await addList(newListName)
-            setListsStale(true)
-            setNewListName('')
-        } catch(err) {
-            console.error('failed to add list', newListName, err)
-        }
-    }
+    // const addListAndRefetch = async () => {
+    //     try {
+    //         // await addList(newListName)
+    //         setListsStale(true)
+    //         // setNewListName('')
+    //     } catch(err) {
+    //         console.error('failed to add list', err)
+    //         // console.error('failed to add list', newListName, err)
+    //     }
+    // }
 
     const removeListAndRefetch = async (listId: string) => {
         try {
@@ -80,13 +81,13 @@ export default function Home(props: Props) {
     }
     
     return (
-        <Col className="p-7 gap-10 bg-gray-100 text-gray-600 h-screen">
-            <Col className="gap-7 self-stretch">
-                <Row className={`text-2xl gap-3`}>
+        <Col className="gap-4">
+            <Col className="gap-5 self-stretch">
+                <Row className={`text-2xl gap-2 md:gap-3`}>
                     <Image src={briefcaseIcon} alt="Briefcase" />
                     <span>My Lists</span>
                 </Row>
-                <Col className={clsx("gap-3", classes.widthLimits)}>
+                <Col className={clsx("gap-3 max-h-[70vh] overflow-y-auto", classes.widthLimits)}>
                     { lists.map((list) => {
                         return (
                             <ListInfo
@@ -99,11 +100,14 @@ export default function Home(props: Props) {
                 </Col>
             </Col>
             <Col className={clsx("gap-2", classes.widthLimits)}>
-                <TextInput label="List Name" value={newListName} onChange={e => setNewListName(e.target.value)} />
-                <Button disabled={!newListName} className={`p-2 text-lg font-bold cursor-pointer bg-blue-200`} onClick={addListAndRefetch}>
-                    Create List
-                </Button>
+                {/* <TextInput label="List Name" value={newListName} onChange={e => setNewListName(e.target.value)} /> */}
+                <Link href="/lista/manage/lists/create" className="self-start">
+                    <Button>
+                        Create List
+                    </Button>
+                </Link>
             </Col>
+        
         </Col>
     )
 }

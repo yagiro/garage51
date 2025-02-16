@@ -3,26 +3,25 @@ import { firestore } from '@/app/lib/firestore'
 const listsRef = firestore.collection('lista_lists')
 const listItemsRef = firestore.collection('lista_list_items')
 
-import { List, ListItem, NewListItem } from '../types'
+import { List, ListItem, NewList, NewListItem } from '../types'
 import { QuerySnapshot } from '@google-cloud/firestore'
 // import { List, ListItem } from '../types'
 
 // todo: code style
 
-interface NewListDoc {
-    name: string
-}
+type NewListDoc = NewList
 
 interface ListDocData extends NewListDoc {
     id: string
 }
 
-const buildNewListDoc = (name: string): NewListDoc => ({ name })
+const buildNewListDoc = (newList: NewList): NewListDoc => newList
 
 function listFromDoc(docId: string, docData: ListDocData): List {
     return {
         id: docId,
-        name: docData.name
+        name: docData.name,
+        fields: [], // todo: fix!!
     }
 }
 
@@ -40,16 +39,16 @@ async function getAllLists(): Promise<List[]> {
 }
 
 
-async function addList(name: string): Promise<List> {
-    const listDocToAdd = buildNewListDoc(name)
-    const docRef = listsRef.doc(name)
-    const docData = await docRef.get()
-    if (!docData.exists) {
+async function addList(newList: NewList): Promise<List> {
+    const listDocToAdd = buildNewListDoc(newList)
+    const docRef = listsRef.doc(newList.id)
+    const docSnap = await docRef.get()
+    if (!docSnap.exists) {
         docRef.set(listDocToAdd)
     } else {
         throw Error('List name already in use.')
     }
-    return { id: name, name }
+    return docSnap.data() as List
 }
 
 async function getList(listName: string): Promise<List> {

@@ -1,6 +1,6 @@
 'use server'
 
-import { List, ListItem } from './types'
+import { List, ListItem, NewList } from './types'
 import { revalidatePath } from 'next/cache'
 import db from './lib/listaDb'
 
@@ -8,10 +8,15 @@ export async function getAllLists(): Promise<List[]> {
     return db.getAllLists()
 }
 
-export async function addList(name: string) {
-    const list = await db.addList(name)
-    revalidatePath('/lista')
-    return list
+export async function createList(newList: NewList): Promise<List> {
+    const { id, name, fields } = newList
+    if (!id || !name || fields.some(fld => !fld.name)) {
+        console.error('bad request. cannot create list.', { id, name })
+        throw Error('Invalid list arguments.')
+    }
+
+    const createdList = await db.addList(newList)
+    return createdList
 }
 
 export async function addListItem(formData: FormData): Promise<ListItem | undefined> {

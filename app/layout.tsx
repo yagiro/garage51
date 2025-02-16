@@ -45,9 +45,9 @@ export default function RootLayout({
 }>) {
   const fontVariablesConcat = fonts.map(font => font.variable).join(' ')
   return (
-    <html lang="en">
+    <html className="" lang="en">
       <body
-        className={`${fontVariablesConcat} antialiased main-font`}
+        className={`${fontVariablesConcat} antialiased main-font bg-gray-50 text-gray-600`}
       >
         {children}
       </body>

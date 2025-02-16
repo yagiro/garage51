@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import ListPage from './ListPage'
-import { getList } from '../serverActions'
+import { getList } from '@/app/lista/serverActions'
 
 interface Params {
   listId: string

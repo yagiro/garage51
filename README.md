@@ -1,5 +1,32 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+## Data
+```
+lists: collection<list>
+    id: string
+    title: string
+    ownerId: string (fk -> users.id)
+    collaborators: collaborator[]
+        userId: string (fk -> users.id)
+        role: string (read/write)
+    items: subcollection<item>
+        id: string
+        title: string
+        checked: boolean
+users: collection<user>
+    id: string
+    listIds: string[] (fk -> lists.id)
+```
+
+chatgpt convo about firebase subcollections:
+https://chatgpt.com/c/67af453e-ac70-800a-8a95-51e06f85ee50
+
+## Auth0
+
+quickstart v2:
+https://auth0.com/docs/quickstart/webapp/nextjs/interactive
+
 ## Getting Started
 
 First, run the development server:
