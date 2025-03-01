@@ -22,10 +22,45 @@ users: collection<user>
 chatgpt convo about firebase subcollections:
 https://chatgpt.com/c/67af453e-ac70-800a-8a95-51e06f85ee50
 
+## Firestore
+
+Manage:  
+https://console.cloud.google.com/firestore/databases/garage51-db/data/panel/lista_lists/feature_ideas?inv=1&invt=AbqxGg&project=garage51  
+
+Docs:  
+https://firebase.google.com/docs/firestore/query-data/queries  
+
+https://googleapis.dev/nodejs/firestore/latest/  
+
 ## Auth0
 
-quickstart v2:
+quickstart v2
 https://auth0.com/docs/quickstart/webapp/nextjs/interactive
+
+auth0 sdk  
+https://github.com/auth0/nextjs-auth0
+
+Post-user Registration Trigger  
+https://auth0.com/docs/customize/actions/explore-triggers/signup-and-login-triggers/post-user-registration-trigger#notify-slack-when-a-new-user-registers
+
+Update a user's user_metadata  
+https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md#update-a-users-user_metadata
+
+
+## TODO
+
+### TODO: Instead of using email as foreign key to a user, do the following:
+1. create an endpoint 'onUserRegistered'.
+2. have this endpoint be triggered by auth0 Post-user Registration Trigger (see ref below)
+3. This endpoint should update the user's metadata
+
+> Ref:  
+> Post-user Registration Trigger  
+> https://auth0.com/docs/customize/actions/explore-triggers/signup-and-login-triggers/post-user-registration-trigger#notify-slack-when-a-new-user-registers  
+> 
+> Update a user's user_metadata  
+> https://github.com/auth0/node-auth0/blob/master/EXAMPLES.md#update-a-users-user_metadata  
+
 
 ## Getting Started
 

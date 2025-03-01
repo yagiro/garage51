@@ -34,7 +34,7 @@ export default function Dropdown(props: Props) {
                         <div key={opt.value}
                             onClick={() => onChange?.(opt.value)}
                             className={clsx(
-                                'text-md px-2 py-1 cursor-pointer',
+                                'text-sm px-2 py-1 cursor-pointer',
                                 // { 'bg-slate-300': opt.value === value },
                                 opt.value === value ? 'bg-slate-300' : 'bg-slate-100',
                             )}

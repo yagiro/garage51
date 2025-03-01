@@ -9,13 +9,20 @@ export interface ListSchemaField {
     type: ListSchemaFieldType
 }
 
-export interface NewList {
+export interface NewListDto {
     id: string
     name: string
     fields: ListSchemaField[]
 }
 
-export type List = NewList
+export interface NewList {
+    id: string
+    name: string
+    fields: ListSchemaField[]
+    user_email: string
+}
+
+export type List = NewListDto
 
 export type NewListItem = Record<string, unknown> & {
     list_id: string

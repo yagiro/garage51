@@ -12,6 +12,7 @@ import XMark from '@/app/icons/x-mark.svg'
 import clsx from 'clsx'
 import briefcaseIcon from '@/app/icons/briefcase.svg'
 import Image from 'next/image'
+import { useUser } from '@/app/auth/idmHooks'
 
 // todo: code style
 
@@ -47,10 +48,12 @@ const classes = {
 export default function Home(props: Props) {
     const [lists, setLists] = useState<List[]>(props.initialLists)
     const [isListsStale, setListsStale] = useState<boolean>(false)
+    const { user } = useUser()
     // const [newListName, setNewListName] = useState<string>('')
+    // console.log('client', { user })
     useEffect(() => {
-        if (isListsStale) {
-            getAllLists()
+        if (isListsStale && user?.email) {
+            getAllLists(user.email)
                 .then(_lists => setLists(_lists))
                 .catch(err => {
                     console.error('failed ot get all lists', err)
@@ -58,7 +61,7 @@ export default function Home(props: Props) {
                 })
                 .finally(() => setListsStale(false))
         }
-    }, [isListsStale])
+    }, [isListsStale, user])
 
     // const addListAndRefetch = async () => {
     //     try {
@@ -107,7 +110,6 @@ export default function Home(props: Props) {
                     </Button>
                 </Link>
             </Col>
-        
         </Col>
     )
 }

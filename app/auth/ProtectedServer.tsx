@@ -16,6 +16,7 @@ export default async function ProtectedServer({ render }: Props) {
     if (!session) return (
         <LoginSection />
     )
+    // console.log('Rendering ProtectedServer', { user: session.user })
     return (
         <Col>
             <Row className="px-2 py-2 md:px-5 md:py-3 justify-between items-center gap-3 bg-white">

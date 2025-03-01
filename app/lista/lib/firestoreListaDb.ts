@@ -25,8 +25,8 @@ function listFromDoc(docId: string, docData: ListDocData): List {
     }
 }
 
-async function getAllLists(): Promise<List[]> {
-    const querySnap = await listsRef.get()
+async function getAllLists(userEmail: string): Promise<List[]> {
+    const querySnap = await listsRef.where('user_email', '==', userEmail).get()
     const lists: List[] = []
     querySnap.forEach(docSnap => {
         const docData = docSnap.data()
@@ -37,7 +37,6 @@ async function getAllLists(): Promise<List[]> {
     })
     return lists
 }
-
 
 async function addList(newList: NewList): Promise<List> {
     const listDocToAdd = buildNewListDoc(newList)

@@ -1,8 +1,8 @@
 'use client'
 
 import Col from '@/app/components/layout/Col'
-import { ListItem } from '@/app/lista/types'
-import { addListItem, getListItems, removeListItem, setItemChecked } from '@/app/lista/serverActions'
+import { List, ListItem } from '@/app/lista/types'
+import { addListItem, getList, getListItems, removeListItem, setItemChecked } from '@/app/lista/serverActions'
 import TextInput from '@/app/components/basic/textInput/TextInput'
 import Button from '@/app/components/basic/button/Button'
 import Row from '@/app/components/layout/Row'
@@ -53,6 +53,8 @@ const emptyArr: unknown[] = []
 
 export default function ListPage({listId}: Props)  {
 
+    const [list, setList] = useState<List>()
+
     const [textFilter, setTextFilter] = useState('')
     const [loading, setLoading] = useState(true)
     const [fetching, setFetching] = useState(false)
@@ -61,6 +63,11 @@ export default function ListPage({listId}: Props)  {
     const [itemTitle, setItemTitle] = useState('')
     const [showChecked, setShowChecked] = useState(true)
     const [showFilters, setShowFilters] = useState(false)
+
+    useEffect(() => {
+        getList(listId)
+            .then(list => setList(list))
+    }, [ listId ])
 
     useEffect(() => {
         if (!stale) return;
@@ -113,7 +120,7 @@ export default function ListPage({listId}: Props)  {
                 <Col>
                     <MainBreadcrumbs />
                     <Row className='gap-4 items-end'>
-                        <Title>{listId}</Title>
+                        <Title>{ list?.name ?? listId}</Title>
                         <span className={clsx('text-sm bg-amber-200 px-1 py-0.5 rounded', {'invisible': !fetching})}>Syncing</span>
                     </Row>
                 </Col>

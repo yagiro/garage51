@@ -33,8 +33,8 @@ function renderFields(
 ) {
     return fields.map(fld => {
         return (
-            <Row key={fld.tempId} className="gap-3 p-3 flex-wrap bg-slate-200">
-                <Image src={xMarkIcon} alt="X" className="mt-[14px] cursor-pointer" onClick={() => onFieldRemove(fld.tempId)} />
+            <Row key={fld.tempId} className="relative gap-3 p-3 flex-wrap bg-slate-200">
+                <Image src={xMarkIcon} alt="X" className="absolute -top-[10px] right-[1px] mt-[14px] cursor-pointer" onClick={() => onFieldRemove(fld.tempId)} />
                 <TextInput label="Name" value={fld.name} onChange={e => onFieldChange({ ...fld, name: e.target.value })} />
                 <Dropdown
                     label="Type"
@@ -73,6 +73,7 @@ function areFieldValid(fields: ListSchemaField[]): boolean {
 
 export default function NewListPage() {
     const [listId, setListId] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     const [listName, setListName] = useState('')
     const [fields, setFields] = useState<ListSchemaField[]>(initialFields)
 
@@ -99,6 +100,7 @@ export default function NewListPage() {
     }
 
     const submit = async () => {
+        setErrorMessage('')
         const newList = {
             id: listId,
             name: listName,
@@ -110,6 +112,8 @@ export default function NewListPage() {
         }
         catch(err) {
             console.error('Failed to create list', { newList }, err)
+            const errMsg = (err as Error).message
+            setErrorMessage(errMsg)
         }
     } 
 
@@ -129,6 +133,9 @@ export default function NewListPage() {
                 onClick={submit}
                 disabled={!valid}
             >Create List</Button>
+            { !!errorMessage && <Col className="p-3 bg-red-100 rounded border-2 border-red-600 text-red-800">
+                { errorMessage }
+            </Col>}
         </Col>
     )
 }
