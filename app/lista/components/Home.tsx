@@ -28,7 +28,7 @@ function ListInfo(props: ListInfoProps) {
     const { list, onRemove } = props
     return (
         <Link href={`/lista/lists/${list.id}`}>
-            <Row key={list.id} className='gap-5 p-3 bg-violet-200 shadow-sm justify-between'>
+            <Row key={list.id} className='gap-5 p-3 bg-orange-400 text-yellow-950 shadow-md justify-between'>
                 {list.name}
                 <Image
                     src={XMark}
@@ -43,6 +43,18 @@ function ListInfo(props: ListInfoProps) {
 
 const classes = {
     widthLimits: 'min-w-[150px] max-w-[300px]',
+}
+
+function NewListButton() {
+    return (
+        <Col className={clsx("gap-2")}>
+            <Link href="/lista/manage/lists/create" className="self-start">
+                <Button>
+                    + List
+                </Button>
+            </Link>
+        </Col>
+    )
 }
 
 export default function Home(props: Props) {
@@ -86,9 +98,12 @@ export default function Home(props: Props) {
     return (
         <Col className="gap-4">
             <Col className="gap-5 self-stretch">
-                <Row className={`text-2xl gap-2 md:gap-3`}>
-                    <Image src={briefcaseIcon} alt="Briefcase" />
-                    <span>My Lists</span>
+                <Row className="justify-between gap-4">
+                    <Row className={`text-xl md:text-2xl gap-2 md:gap-3 items-center`}>
+                        <Image src={briefcaseIcon} alt="Briefcase" />
+                        <span className="shrink-0">My Lists</span>
+                    </Row>
+                    <NewListButton />
                 </Row>
                 <Col className={clsx("gap-3 max-h-[70vh] overflow-y-auto", classes.widthLimits)}>
                     { lists.map((list) => {
@@ -101,14 +116,6 @@ export default function Home(props: Props) {
                         )
                     }) }
                 </Col>
-            </Col>
-            <Col className={clsx("gap-2", classes.widthLimits)}>
-                {/* <TextInput label="List Name" value={newListName} onChange={e => setNewListName(e.target.value)} /> */}
-                <Link href="/lista/manage/lists/create" className="self-start">
-                    <Button>
-                        Create List
-                    </Button>
-                </Link>
             </Col>
         </Col>
     )

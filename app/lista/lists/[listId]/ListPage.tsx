@@ -30,7 +30,7 @@ function renderItems(
 ) {
     return items.map(item => {
         return (
-            <Row key={item.id} className='p-2 gap-3 bg-violet-200 max-w-max justify-between'>
+            <Row key={item.id} className='p-2 gap-3 bg-yellow-200 text-neutral-700 max-w-max justify-between'>
                 <Checkbox value={item.checked} onChange={(checked) => onItemCheckToggle(item.id, checked)} />
                 <div className='shrink'>{item.title as string ?? 'noname'}</div>
                 <Image

@@ -33,15 +33,17 @@ function renderFields(
 ) {
     return fields.map(fld => {
         return (
-            <Row key={fld.tempId} className="relative gap-3 p-3 flex-wrap bg-slate-200">
-                <Image src={xMarkIcon} alt="X" className="absolute -top-[10px] right-[1px] mt-[14px] cursor-pointer" onClick={() => onFieldRemove(fld.tempId)} />
-                <TextInput label="Name" value={fld.name} onChange={e => onFieldChange({ ...fld, name: e.target.value })} />
-                <Dropdown
-                    label="Type"
-                    value={fld.type}
-                    options={fieldTypeOptions}
-                    onChange={fldType => onFieldChange({ ...fld, type: fldType as ListSchemaFieldType })}
-                />
+            <Row key={fld.tempId} className="relative items-center gap-3 p-4 pr-10 flex-wrap bg-white shadow-sm shadow-gray-200">
+                <Image src={xMarkIcon} alt="X" className="absolute -top-[10px] right-[2px] mt-[14px] cursor-pointer" onClick={() => onFieldRemove(fld.tempId)} />
+                <Col className="gap-2 items-start">
+                    <TextInput value={fld.name} onChange={e => onFieldChange({ ...fld, name: e.target.value })} />
+                    <Dropdown
+                        // label="Type"
+                        value={fld.type}
+                        options={fieldTypeOptions}
+                        onChange={fldType => onFieldChange({ ...fld, type: fldType as ListSchemaFieldType })}
+                    />
+                </Col>
             </Row>
         )
     })
@@ -118,9 +120,11 @@ export default function NewListPage() {
     } 
 
     return (
-        <Col className="gap-5 items-start">
-            <MainBreadcrumbs />
-            <Title>Create List</Title>
+        <Col className="gap-3 items-start">
+            <Col>
+                <MainBreadcrumbs />
+                <Title>Create List</Title>
+            </Col>
             <Row className="gap-3 flex-wrap">
                 <TextInput label="Name" value={listName} onChange={e => setListName(e.target.value)} />
                 <TextInput label="ID" value={listId} onChange={e => setListId(e.target.value)} />

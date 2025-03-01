@@ -21,7 +21,7 @@ export default function TextInput(props: TextInputProps) {
             <input
                 { ...inputProps }
                 name={name}
-                className={clsx("text-black p-2 border border-teal-700 rounded", inputClass)}
+                className={clsx("text-gray-800 p-2 border border-gray-200 rounded", inputClass)}
             ></input>
         </Col>
     )
